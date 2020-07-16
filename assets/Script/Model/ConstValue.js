@@ -1,4 +1,5 @@
 
+//格子类型
 export const CELL_TYPE = {
     EMPTY : 0,
     A : 1,
@@ -10,6 +11,7 @@ export const CELL_TYPE = {
     BIRD : 7
 }
 export const CELL_BASENUM = 6;
+//格子状态
 export const CELL_STATUS = {
     COMMON: 0 ,
     CLICK: "click",

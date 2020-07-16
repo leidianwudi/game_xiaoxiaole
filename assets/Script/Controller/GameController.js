@@ -17,6 +17,12 @@ cc.Class({
         grid:{
             default: null,
             type: cc.Node
+        },
+
+        //结束节点
+        layFinish:{
+            default: null,
+            type: cc.Node
         }
     },
 
@@ -30,11 +36,44 @@ cc.Class({
     },
 
     selectCell: function(pos){
-        return this.gameModel.selectCell(pos);
+        let arrCell = this.gameModel.selectCell(pos);
+
+        //this.scheduleOnce(this.endGame.bind(this), 1);
+        this.tryEndGame();
+        
+        return arrCell;
     },
     cleanCmd: function(){
         this.gameModel.cleanCmd();
-    }
+    },
+    //尝试提前结束游戏
+    tryEndGame()
+    {
+        if (this.gameModel.isGameEnd())
+        {
+            this.layFinish.active = true;//节点可见
+        }
+    },
+
+    //重新开始游戏
+    restartGame()
+    {
+        this.layFinish.active = false;//节点不可见
+        //this.gameModel = null;
+        this.gameModel = new GameModel();
+        this.gameModel.init(4);
+        var gridScript = this.grid.getComponent("GridView");
+        gridScript.setController(this);
+        gridScript.initWithCellModels(this.gameModel.getCells());
+    },
+
+    // //返回手动提前结束游戏，需要数据
+    // getEndGameArr()
+    // {
+    //     this.layFinish.active = false;//节点不可见
+    //     this.selectCell(cc.v2(1,1));        
+    //     return this.gameModel.getEndGameArr();//强制结束游戏
+    // }
 
     // called every frame, uncomment this function to activate update callback
     // update: function (dt) {

@@ -1,14 +1,14 @@
 import { CELL_TYPE, ANITIME, CELL_STATUS, GRID_HEIGHT } from "./ConstValue";
 export default class CellModel {
     constructor() {
-        this.type = null;
-        this.status = CELL_STATUS.COMMON;
-        this.x = 1;
+        this.type = null;                   //类型
+        this.status = CELL_STATUS.COMMON;   //状态
+        this.x = 1;                         //位置
         this.y = 1;
-        this.startX = 1;
+        this.startX = 1;                    //其实位置
         this.startY = 1;
-        this.cmd = [];
-        this.isDeath = false;
+        this.cmd = [];                      //移动命令
+        this.isDeath = false;               //是否销毁
         this.objecCount = Math.floor(Math.random() * 1000);
     }
 
@@ -37,6 +37,7 @@ export default class CellModel {
         this.status = status;
     }
 
+    //移到后返回
     moveToAndBack(pos) {
         var srcPos = cc.v2(this.x, this.y);
         this.cmd.push({
@@ -53,6 +54,7 @@ export default class CellModel {
         });
     }
 
+    //移动
     moveTo(pos, playTime) {
         var srcPos = cc.v2(this.x, this.y); 
         this.cmd.push({
@@ -65,6 +67,7 @@ export default class CellModel {
         this.y = pos.y;
     }
 
+    //销毁格子
     toDie(playTime) {
         this.cmd.push({
             action: "toDie",
@@ -74,6 +77,7 @@ export default class CellModel {
         this.isDeath = true;
     }
 
+    //抖动
     toShake(playTime) {
         this.cmd.push({
             action: "toShake",
@@ -82,6 +86,7 @@ export default class CellModel {
         });
     }
 
+    //格子启用
     setVisible(playTime, isVisible) {
         this.cmd.push({
             action: "setVisible",
@@ -95,6 +100,7 @@ export default class CellModel {
 
     }
 
+    //是小鸟
     isBird() {
         return this.type == CELL_TYPE.G;
     }

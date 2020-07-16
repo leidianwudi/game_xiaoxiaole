@@ -3,7 +3,7 @@ import {CELL_WIDTH, CELL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT, ANITIME} f
 import AudioUtils from "../Utils/AudioUtils";
 
 cc.Class({
-    extends: cc.Component,
+    extends: cc.Component,    
 
     properties: {
         // foo: {
@@ -27,7 +27,8 @@ cc.Class({
         audioUtils:{
             type: AudioUtils,
             default: null
-        }
+        },
+        cellViews: [],
         
     },
 
@@ -43,8 +44,17 @@ cc.Class({
         this.controller = controller;
     },
 
-    initWithCellModels: function(cellsModels){
-        this.cellViews = [];
+    initWithCellModels: function(cellsModels){        
+
+        for(var i = 1;i<=this.cellViews.length;i++){
+            if (this.cellViews[i] == null) continue;
+
+            for(var j = 1;j<=this.cellViews[i].length;j++){
+                if (null != this.cellViews[i][j]) 
+                    this.cellViews[i][j].destroy();//释放旧数据
+            }
+        }        
+
         for(var i = 1;i<=9;i++){
             this.cellViews[i] = [];
             for(var j = 1;j<=9;j++){
@@ -170,6 +180,7 @@ cc.Class({
         }
         return null;
     },
+    //返回特效要播放的总时间
     getPlayAniTime: function(changeModels){
         if(!changeModels){
             return 0;
@@ -225,9 +236,15 @@ cc.Class({
     },
     playEffect: function(effectsQueue){
         this.effectLayer.getComponent("EffectLayer").playEffects(effectsQueue);
+    },
+
+    //重置游戏
+    restartGame()
+    {
+        //var result = this.controller.getEndGameArr(); // 返回手动提前结束游戏，需要数据
+        //this.updateView(result);//结束
+        this.controller.restartGame();
     }
-
-
 
 
     // called every frame, uncomment this function to activate update callback
