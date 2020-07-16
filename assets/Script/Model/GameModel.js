@@ -507,7 +507,7 @@ export default class GameModel {
             }
         }
 
-        if (bombModels.length <= 50 && bombModels.length > 0)
+        if (bombModels.length <= 12 && bombModels.length > 0)
         {
             let cycleCount = 4;
             for(let i = 0; i < bombModels.length; i++)
