@@ -1,4 +1,5 @@
 import GameModel from "../Model/GameModel";
+import { CELL_TYPE, CELL_BASENUM, CELL_STATUS, GRID_WIDTH, GRID_HEIGHT, ANITIME } from "../Model/ConstValue";
 
 cc.Class({
     extends: cc.Component,
@@ -23,6 +24,18 @@ cc.Class({
         layFinish:{
             default: null,
             type: cc.Node
+        },
+
+        //进度条
+        bar:{
+            default: null,
+            type: cc.ProgressBar
+        },
+
+        //进度条文字
+        labTip:{
+            default: null,
+            type: cc.Label
         }
     },
 
@@ -33,6 +46,9 @@ cc.Class({
         var gridScript = this.grid.getComponent("GridView");
         gridScript.setController(this);
         gridScript.initWithCellModels(this.gameModel.getCells());
+
+        this.bar.progress = 0;
+        this.labTip.string = "0/100";
     },
 
     selectCell: function(pos){
@@ -40,6 +56,7 @@ cc.Class({
 
         //this.scheduleOnce(this.endGame.bind(this), 1);
         this.tryEndGame();
+        this.updatePress();//更新进度条
         
         return arrCell;
     },
@@ -52,12 +69,25 @@ cc.Class({
         if (this.gameModel.isGameEnd())
         {
             this.layFinish.active = true;//节点可见
-        }
+        }        
+    },
+
+    //更新进度条
+    updatePress()
+    {
+        let arr = this.gameModel.getLiveCells();
+        let sum = GRID_WIDTH * GRID_HEIGHT;//格子总数
+        let num = sum - arr.length;        //已经消除的格子
+        let per = parseInt((num * 100) / sum);       //百分之多少 90%
+        this.bar.progress = (per / 100.0);   //进度条长度
+        this.labTip.string = per.toString() + "/100";
     },
 
     //重新开始游戏
     restartGame()
     {
+        this.bar.progress = 0;
+        this.labTip.string = "0/100";
         this.layFinish.active = false;//节点不可见
         //this.gameModel = null;
         this.gameModel = new GameModel();

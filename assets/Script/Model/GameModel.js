@@ -495,8 +495,8 @@ export default class GameModel {
         return newCheckPoint;
     }
 
-    //尝试结束游戏
-    isGameEnd()
+    //返回活的节点队列
+    getLiveCells()
     {
         let bombModels = [];
         for (var i = 1; i <= GRID_HEIGHT; i++) {
@@ -506,6 +506,13 @@ export default class GameModel {
                 if (cell != null) bombModels.push(cell);
             }
         }
+        return bombModels;
+    }
+
+    //尝试结束游戏
+    isGameEnd()
+    {
+        let bombModels = this.getLiveCells();//活的节点队列
 
         if (bombModels.length <= 12 && bombModels.length > 0)
         {
